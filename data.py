@@ -1,5 +1,6 @@
 from skimage import io
 import os
+import helpers as hlp
 
 NEW_IMG_SIZE = (256, 256)
 WIN_SIZE = 5
@@ -9,6 +10,8 @@ SEED_SIZE = 3
 SIGMA = WIN_SIZE / 6.4
 ERR_THOLD = 1e-1
 MAX_ERR_THOLD = 3e-1
+
+GAUSS_MASK = hlp.gauss_window(WIN_SIZE, SIGMA)
 
 
 def read_texs():
