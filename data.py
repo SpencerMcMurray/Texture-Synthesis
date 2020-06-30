@@ -2,7 +2,7 @@ from skimage import io
 import os
 import helpers as hlp
 
-NEW_IMG_SIZE = (256, 256)
+NEW_IMG_SIZE = (128, 128)
 WIN_SIZE = 5
 
 # Values described here: https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html

@@ -13,6 +13,13 @@ def find_match(sample, window, valid_window):
     rows, cols = sample.shape
     ssd = np.zeros((rows - (2 * itvl) - 1, cols - (2 * itvl) - 1))
     tot_weight = np.sum(window * valid_window)
+
+    # TESTING
+    if tot_weight == 0:
+        print(window)
+        print()
+        print(valid_window)
+
     # Go through each useable sample pixel and calculate its ssd value
     for i in range(itvl, rows - itvl - 1):
         for j in range(itvl, cols - itvl - 1):
@@ -22,10 +29,9 @@ def find_match(sample, window, valid_window):
             ssd[x, y] = np.sum(dist * valid_window *
                                data.GAUSS_MASK) / tot_weight
     # Get pixels under the error thold
-    best = np.argwhere(ssd <= np.min(ssd) * (1 + data.ERR_THOLD))
+    best = np.argwhere(ssd <= (np.min(ssd) * (1 + data.ERR_THOLD)))
     px = best[randint(0, len(best) - 1)]
-    x, y = px[0], px[1]
-    return {"pixel": px, "error": ssd[x, y]}
+    return {"pixel": px, "error": ssd[px[0], px[1]]}
 
 
 def get_window(img, pixel, size):
@@ -56,7 +62,7 @@ def unfilled_neighbours(filled_img):
     for i in range(len(rows)):
         px = (rows[i], cols[i])
         w = get_window(filled_img, px, data.WIN_SIZE)
-        unfilled.append({"pixel": px, "count": np.sum(w), "window": w})
+        unfilled.append({"pixel": px, "count": np.sum(w)})
     return sorted(unfilled, key=lambda p: p["count"], reverse=True)
 
 
@@ -64,7 +70,7 @@ def seed_sample(sample, size):
     """
     Creates the random (size)x(size) seed for the new image
     """
-    rows, cols = sample.new_img_shape
+    rows, cols = sample.shape
     rand_x, rand_y = randint(0, rows - size), randint(0, cols - size)
     return sample[rand_x:rand_x + size, rand_y:rand_y + size]
 
