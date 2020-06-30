@@ -5,6 +5,7 @@ NEW_IMG_SIZE = (256, 256)
 WIN_SIZE = 5
 
 # Values described here: https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html
+SEED_SIZE = 3
 SIGMA = WIN_SIZE / 6.4
 ERR_THOLD = 1e-1
 MAX_ERR_THOLD = 3e-1
