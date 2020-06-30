@@ -1,6 +1,9 @@
 from skimage import io
 import os
 
+NEW_IMG_SIZE = (256, 256)
+WIN_SIZE = 5
+
 
 def read_texs():
     """
