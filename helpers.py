@@ -14,11 +14,8 @@ def find_match(sample, window, valid_window):
     ssd = np.zeros((rows - (2 * itvl) - 1, cols - (2 * itvl) - 1))
     tot_weight = np.sum(window * valid_window)
 
-    # TESTING
     if tot_weight == 0:
-        print(window)
-        print()
-        print(valid_window)
+        print("Increase window size!")
 
     # Go through each useable sample pixel and calculate its ssd value
     for i in range(itvl, rows - itvl - 1):
