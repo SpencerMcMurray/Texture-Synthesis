@@ -30,15 +30,16 @@ def synthesis(sample, new_img_shape, window_size):
         progress = False
         unfilled = hlp.unfilled_neighbours(filled)
         for pixel in unfilled:
+            x1, y1 = pixel["pixel"]
             window = hlp.get_window(new_img, pixel["pixel"], data.WIN_SIZE)
             valid_window = hlp.get_window(
                 filled, pixel["pixel"], data.WIN_SIZE)
             best_match = hlp.find_match(sample, window, valid_window)
             # If its lower than our max thold then fill in the pixel
             if best_match["error"] < max_thold:
-                x, y = best_match["pixel"]
-                new_img[x, y] = sample[x, y]
-                filled[x, y] = 1
+                x2, y2 = best_match["pixel"]
+                new_img[x1, y1] = sample[x2, y2]
+                filled[x1, y1] = 1
                 progress = True
                 num_filled += 1
         if not progress:

@@ -15,7 +15,7 @@ def find_match(sample, window, valid_window):
     tot_weight = np.sum(window * valid_window)
 
     if tot_weight == 0:
-        print("Increase window size!")
+        raise Exception("Window size not large enough")
 
     # Go through each useable sample pixel and calculate its ssd value
     for i in range(itvl, rows - itvl - 1):
