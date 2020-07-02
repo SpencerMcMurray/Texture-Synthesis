@@ -33,13 +33,13 @@ def precompute_windows(img, win_size):
     return np.array(windows)
 
 
-def find_match(sample, window, valid_window, sample_windows):
+def find_match(sample, window, valid_window, sample_windows, gauss_mask):
     """
     Returns a random match from all the best matches for the window
     """
     rows, cols = sample.shape
     ssd = np.zeros(sample.shape)
-    valid_gauss = data.GAUSS_MASK * valid_window
+    valid_gauss = gauss_mask * valid_window
     tot_weight = np.sum(valid_gauss)
 
     if tot_weight == 0:

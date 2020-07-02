@@ -5,7 +5,7 @@ import time
 import matplotlib.pyplot as plt
 
 
-def synthesis(sample, new_img_shape, window_size, ax, debug):
+def synthesis(sample, new_img_shape, window_size, gauss_mask):
     """
     Implementation of the Texture Synthesis by Non-parametric Sampling
     algorithm developed by Efros & Leung.
@@ -28,15 +28,9 @@ def synthesis(sample, new_img_shape, window_size, ax, debug):
     num_filled = data.SEED_SIZE ** 2
     start = time.perf_counter()
 
-    if debug:
-        h = ax.imshow(new_img, cmap="gray")
-
     # Main while loop
     while num_filled < pixel_count:
         print(f"{pixel_count - num_filled} left; {round(100 * num_filled / pixel_count, 2)}% complete; {int(time.perf_counter()-start)}s")
-        if debug:
-            h.set_data(new_img)
-            plt.draw(), plt.pause(1e-1)
         progress = False
         unfilled = hlp.unfilled_neighbours(filled, window_size)
         for pixel in unfilled:
@@ -44,7 +38,7 @@ def synthesis(sample, new_img_shape, window_size, ax, debug):
             window = hlp.get_window(new_img, (x1, y1), window_size)
             valid_window = hlp.get_window(filled, (x1, y1), window_size)
             best_match = hlp.find_match(
-                sample, window, valid_window, sample_windows)
+                sample, window, valid_window, sample_windows, gauss_mask)
             # If its lower than our max thold then fill in the pixel
             if best_match["error"] < max_thold:
                 x2, y2 = best_match["pixel"]

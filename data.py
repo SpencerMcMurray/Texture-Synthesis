@@ -1,17 +1,19 @@
 from skimage import io
 import os
+import numpy as np
 import helpers as hlp
 
-NEW_IMG_SIZE = (200, 200)
-WIN_SIZE = 19
+NEW_IMG_SIZE = (128, 128)
+WIN_SIZES = np.array([17, 19, 21])
 
 # Values described here: https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html
 SEED_SIZE = 3
-SIGMA = WIN_SIZE / 6.4
+SIGMAS = WIN_SIZES / 6.4
 ERR_THOLD = 1e-1
 MAX_ERR_THOLD = 3e-1
 
-GAUSS_MASK = hlp.gauss_window(WIN_SIZE, SIGMA)
+GAUSS_MASKS = [hlp.gauss_window(WIN_SIZES[i], SIGMAS[i])
+               for i in range(len(WIN_SIZES))]
 
 
 def read_texs():
