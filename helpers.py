@@ -5,32 +5,6 @@ import numpy as np
 import data
 
 
-def find_match(sample, window, valid_window):
-    """
-    Returns a random match from all the best matches for the window
-    """
-    size, itvl = data.WIN_SIZE, data.WIN_SIZE // 2
-    rows, cols = sample.shape
-    ssd = np.zeros((rows - (2 * itvl) - 1, cols - (2 * itvl) - 1))
-    tot_weight = np.sum(window * valid_window)
-
-    if tot_weight == 0:
-        raise Exception("Window size not large enough")
-
-    # Go through each useable sample pixel and calculate its ssd value
-    for i in range(itvl, rows - itvl - 1):
-        for j in range(itvl, cols - itvl - 1):
-            curr = sample[i - itvl:i + itvl + 1, j - itvl:j + itvl + 1]
-            dist = (window - curr) ** 2
-            x, y = i - itvl, j - itvl
-            ssd[x, y] = np.sum(dist * valid_window *
-                               data.GAUSS_MASK) / tot_weight
-    # Get pixels under the error thold
-    best = np.argwhere(ssd <= (np.min(ssd) * (1 + data.ERR_THOLD)))
-    px = best[randint(0, len(best) - 1)]
-    return {"pixel": px, "error": ssd[px[0], px[1]]}
-
-
 def get_window(img, pixel, size):
     """
     Creates a window of size (size)x(size) around pixel.
@@ -46,6 +20,30 @@ def get_window(img, pixel, size):
             if img_i < x_lim and img_i >= 0 and img_j < y_lim and img_j >= 0:
                 w[k, r] = img[img_i, img_j]
     return w
+
+
+def find_match(sample, window, valid_window):
+    """
+    Returns a random match from all the best matches for the window
+    """
+    rows, cols = sample.shape
+    ssd = np.zeros(sample.shape)
+    tot_weight = np.sum(data.GAUSS_MASK * valid_window)
+
+    if tot_weight == 0:
+        raise Exception("Window size not large enough")
+
+    # Go through each useable sample pixel and calculate its ssd value
+    for i in range(rows):
+        for j in range(cols):
+            curr = get_window(sample, (i, j), data.WIN_SIZE)
+            dist = (window - curr) ** 2
+            ssd[i, j] = np.sum(dist * valid_window *
+                               data.GAUSS_MASK) / tot_weight
+    # Get pixels under the error thold
+    best = np.argwhere(ssd <= (np.min(ssd) * (1 + data.ERR_THOLD)))
+    px = best[randint(0, len(best) - 1)]
+    return {"pixel": px, "error": ssd[px[0], px[1]]}
 
 
 def unfilled_neighbours(filled_img):
