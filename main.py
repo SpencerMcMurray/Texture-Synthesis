@@ -6,8 +6,9 @@ import matplotlib.pyplot as plt
 
 def run(texs, debug):
     new_texs = {}
-    fig, axs = plt.subplots(len(texs), 2, constrained_layout=True)
-    fig.suptitle(f"Texture synthesis results w={data.WIN_SIZE}")
+    if debug:
+        fig, axs = plt.subplots(len(texs), 2, constrained_layout=True)
+        fig.suptitle(f"Texture synthesis results w={data.WIN_SIZE}")
     for i, tex_name in enumerate(texs):
         print(f"Starting synthesis for {tex_name}")
         ax2 = None
@@ -47,7 +48,7 @@ def plot(texs, syns):
 
 
 if __name__ == "__main__":
-    DEBUG = True
+    DEBUG = False
     # Reads all imgs in /textures folder
     print("* STARTING READ *")
     TEXS = data.read_texs()

@@ -16,6 +16,7 @@ def synthesis(sample, new_img_shape, window_size, ax, debug):
     pixel_count = rows * cols
     new_img = np.zeros((rows, cols))
     filled = np.zeros((rows, cols))
+    sample_windows = hlp.precompute_windows(sample, data.WIN_SIZE)
 
     # Seed new img and filled
     seed = hlp.seed_sample(sample, data.SEED_SIZE)
@@ -32,7 +33,7 @@ def synthesis(sample, new_img_shape, window_size, ax, debug):
 
     # Main while loop
     while num_filled < pixel_count:
-        print(f"{pixel_count - num_filled} left; {100 * num_filled / pixel_count}% complete; {int(time.perf_counter()-start)}s")
+        print(f"{pixel_count - num_filled} left; {round(100 * num_filled / pixel_count, 2)}% complete; {int(time.perf_counter()-start)}s")
         if debug:
             h.set_data(new_img)
             plt.draw(), plt.pause(1e-1)
@@ -42,9 +43,9 @@ def synthesis(sample, new_img_shape, window_size, ax, debug):
             x1, y1 = pixel["pixel"]
             window = hlp.get_window(new_img, (x1, y1), data.WIN_SIZE)
             valid_window = hlp.get_window(filled, (x1, y1), data.WIN_SIZE)
-            best_match = hlp.find_match(sample, window, valid_window)
+            best_match = hlp.find_match(
+                sample, window, valid_window, sample_windows)
             # If its lower than our max thold then fill in the pixel
-            # print(best_match["error"], ";", max_thold)
             if best_match["error"] < max_thold:
                 x2, y2 = best_match["pixel"]
                 new_img[x1, y1] = sample[x2, y2]

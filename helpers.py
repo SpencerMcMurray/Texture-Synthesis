@@ -22,7 +22,18 @@ def get_window(img, pixel, size):
     return w
 
 
-def find_match(sample, window, valid_window):
+def precompute_windows(img, win_size):
+    rows, cols = img.shape
+    windows = []
+    for i in range(rows):
+        curr_windows = []
+        for j in range(cols):
+            curr_windows.append(get_window(img, (i, j), win_size))
+        windows.append(curr_windows)
+    return np.array(windows)
+
+
+def find_match(sample, window, valid_window, sample_windows):
     """
     Returns a random match from all the best matches for the window
     """
@@ -36,8 +47,7 @@ def find_match(sample, window, valid_window):
     # Go through each useable sample pixel and calculate its ssd value
     for i in range(rows):
         for j in range(cols):
-            curr = get_window(sample, (i, j), data.WIN_SIZE)
-            dist = (window - curr) ** 2
+            dist = (window - sample_windows[i, j]) ** 2
             ssd[i, j] = np.sum(dist * valid_window *
                                data.GAUSS_MASK) / tot_weight
     # Get pixels under the error thold
