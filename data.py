@@ -2,8 +2,8 @@ from skimage import io
 import os
 import helpers as hlp
 
-NEW_IMG_SIZE = (96, 96)
-WIN_SIZE = 17
+NEW_IMG_SIZE = (200, 200)
+WIN_SIZE = 19
 
 # Values described here: https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html
 SEED_SIZE = 3

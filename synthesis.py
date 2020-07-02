@@ -16,7 +16,7 @@ def synthesis(sample, new_img_shape, window_size, ax, debug):
     pixel_count = rows * cols
     new_img = np.zeros((rows, cols))
     filled = np.zeros((rows, cols))
-    sample_windows = hlp.precompute_windows(sample, data.WIN_SIZE)
+    sample_windows = hlp.precompute_windows(sample, window_size)
 
     # Seed new img and filled
     seed = hlp.seed_sample(sample, data.SEED_SIZE)
@@ -38,11 +38,11 @@ def synthesis(sample, new_img_shape, window_size, ax, debug):
             h.set_data(new_img)
             plt.draw(), plt.pause(1e-1)
         progress = False
-        unfilled = hlp.unfilled_neighbours(filled)
+        unfilled = hlp.unfilled_neighbours(filled, window_size)
         for pixel in unfilled:
             x1, y1 = pixel["pixel"]
-            window = hlp.get_window(new_img, (x1, y1), data.WIN_SIZE)
-            valid_window = hlp.get_window(filled, (x1, y1), data.WIN_SIZE)
+            window = hlp.get_window(new_img, (x1, y1), window_size)
+            valid_window = hlp.get_window(filled, (x1, y1), window_size)
             best_match = hlp.find_match(
                 sample, window, valid_window, sample_windows)
             # If its lower than our max thold then fill in the pixel

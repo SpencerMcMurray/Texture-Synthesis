@@ -39,7 +39,8 @@ def find_match(sample, window, valid_window, sample_windows):
     """
     rows, cols = sample.shape
     ssd = np.zeros(sample.shape)
-    tot_weight = np.sum(data.GAUSS_MASK * valid_window)
+    valid_gauss = data.GAUSS_MASK * valid_window
+    tot_weight = np.sum(valid_gauss)
 
     if tot_weight == 0:
         raise Exception("Window size not large enough")
@@ -48,15 +49,14 @@ def find_match(sample, window, valid_window, sample_windows):
     for i in range(rows):
         for j in range(cols):
             dist = (window - sample_windows[i, j]) ** 2
-            ssd[i, j] = np.sum(dist * valid_window *
-                               data.GAUSS_MASK) / tot_weight
+            ssd[i, j] = np.sum(dist * valid_gauss) / tot_weight
     # Get pixels under the error thold
     best = np.argwhere(ssd <= (np.min(ssd) * (1 + data.ERR_THOLD)))
     px = best[randint(0, len(best) - 1)]
     return {"pixel": px, "error": ssd[px[0], px[1]]}
 
 
-def unfilled_neighbours(filled_img):
+def unfilled_neighbours(filled_img, win_size):
     """
     Gets all non-filled pixels which neighbour filled ones,
     then sort them descendingly based on the count of
@@ -66,7 +66,7 @@ def unfilled_neighbours(filled_img):
     rows, cols = np.nonzero(binary_dilation(filled_img) - filled_img)
     for i in range(len(rows)):
         px = (rows[i], cols[i])
-        w = get_window(filled_img, px, data.WIN_SIZE)
+        w = get_window(filled_img, px, win_size)
         unfilled.append({"pixel": px, "count": np.sum(w)})
     return sorted(unfilled, key=lambda p: p["count"], reverse=True)
 
