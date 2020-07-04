@@ -8,5 +8,12 @@ Next you need to go into the data.py file and change the NEW_IMG_SIZE variable t
 
 Finally run main.py and the program will start. It will keep you updated with frequent prints to tell you what stage the program is on.
 
+## A Few Results
+
+![grid](https://i.imgur.com/hvVb10u.png)
+
+![text](https://i.imgur.com/FILAa4h.png)
+
+
 ## Credit
 The algorithm used was created by [A.A. Efros and T.K. Leung](https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html).
