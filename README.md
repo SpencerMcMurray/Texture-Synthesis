@@ -14,6 +14,12 @@ however making these values larger will increase the time it takes to complete b
 Additionally, try to keep the texture sizes small, as larger textures will increase the time
 cost as well.
 
-## Algorithm Credits
+## A Few Results
 
-[Efros & Leung](https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html)
+![grid](https://i.imgur.com/hvVb10u.png)
+
+![text](https://i.imgur.com/FILAa4h.png)
+
+## Credit
+
+The algorithm used was created by [A.A. Efros and T.K. Leung](https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html).
