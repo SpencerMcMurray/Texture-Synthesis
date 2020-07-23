@@ -4,6 +4,8 @@ A Texture Synthesis implementation using the non-parametric method
 
 ## How To Use
 
+Install requirements via `pip install -r requirements.txt`
+
 Place the textures you'd like to synthesize in the /textures folder, then run main.py
 
 You may need to alter NEW_IMG_SIZE &/ WIN_SIZES in data.py to get the results desired,
