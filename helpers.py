@@ -6,7 +6,7 @@ import data
 
 
 def get_window(img, pixel, size):
-    """
+    """(img, 2-tuple of ints, 2-tuple of ints) => 2D window of size size
     Creates a window of size (size)x(size) around pixel.
     This window is filled with the image around pixel, or
     zero if the window goes outside the image boundaries
@@ -23,6 +23,10 @@ def get_window(img, pixel, size):
 
 
 def precompute_windows(img, win_size):
+    """(img, 2-tuple of ints) => list of 2D windows of size win_size
+    Computes a window around every pixel of the original img.
+    This is used before iterating to eliminate repetitive computations.
+    """
     rows, cols = img.shape
     windows = []
     for i in range(rows):
@@ -34,8 +38,8 @@ def precompute_windows(img, win_size):
 
 
 def find_match(sample, window, valid_window, sample_windows, gauss_mask):
-    """
-    Returns a random match from all the best matches for the window
+    """(img, 2D window, 2D window of bools, list of 2D windows, 2D Gaussian mask)
+    Returns a random match from all the best matches for the window.
     """
     rows, cols = sample.shape
     ssd = np.zeros(sample.shape)
@@ -57,7 +61,7 @@ def find_match(sample, window, valid_window, sample_windows, gauss_mask):
 
 
 def unfilled_neighbours(filled_img, win_size):
-    """
+    """(img, 2-tuple of ints) => list of dicts of str:pixel || int
     Gets all non-filled pixels which neighbour filled ones,
     then sort them descendingly based on the count of
     neighbouring filled pixels
@@ -72,7 +76,7 @@ def unfilled_neighbours(filled_img, win_size):
 
 
 def seed_sample(sample, size):
-    """
+    """(img, 2-tuple of ints) => square img of size size
     Creates the random (size)x(size) seed for the new image
     """
     rows, cols = sample.shape
@@ -81,7 +85,7 @@ def seed_sample(sample, size):
 
 
 def gauss_window(shape, sigma):
-    """
+    """(int, float) => 2D Gaussian window of size shape
     Create a 2D Gaussian window
     Edited from https://stackoverflow.com/questions/17190649/how-to-obtain-a-gaussian-filter-in-python
     """

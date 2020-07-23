@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 
 
 def run(texs):
+    """(dict of name:list of imgs) => dict of name:list of synthesized imgs
+    Top level of the synthesis algorithm, calls lower functions to do heavy lifting.
+    Returns synthesized images at differend window sizes to be sent through plot()
+    """
     new_texs = {}
     orig_start = time.perf_counter()
     for i, tex_name in enumerate(texs):
@@ -22,6 +26,9 @@ def run(texs):
 
 
 def plot(texs, syns):
+    """(dict of name:list of imgs, dict of name:list of synthesized imgs)
+    Plots the synthesized images for varying window sizes next to the originals
+    """
     fig, axs = plt.subplots(len(texs), len(
         data.WIN_SIZES) + 1, constrained_layout=True)
     fig.suptitle(f"Texture synthesis results w={data.WIN_SIZES}")

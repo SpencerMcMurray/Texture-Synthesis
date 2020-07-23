@@ -6,10 +6,14 @@ import matplotlib.pyplot as plt
 
 
 def synthesis(sample, new_img_shape, window_size, gauss_mask):
-    """
+    """(img, 2-tuple of int, int, 2D gaussian mask) => synthesized img
     Implementation of the Texture Synthesis by Non-parametric Sampling
     algorithm developed by Efros & Leung.
     https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html
+    Returns a synthesized image of size new_img_shape
+
+    REQ: gauss_mask's size == window_size
+    REQ: window_size <= min(sample.shape)
     """
     max_thold = data.MAX_ERR_THOLD
     rows, cols = new_img_shape

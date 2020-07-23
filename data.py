@@ -17,7 +17,7 @@ GAUSS_MASKS = [hlp.gauss_window(WIN_SIZES[i], SIGMAS[i])
 
 
 def read_texs():
-    """
+    """() => dict of name:list of imgs
     Compiles a dict with the format filename:image
     for all the textures in the /textures folder
     """
