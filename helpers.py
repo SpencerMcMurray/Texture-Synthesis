@@ -1,7 +1,9 @@
-from scipy.signal.windows import gaussian
-from scipy.ndimage import binary_dilation
 from random import randint
+
 import numpy as np
+from scipy.ndimage import binary_dilation
+from scipy.signal.windows import gaussian
+
 import data
 
 
