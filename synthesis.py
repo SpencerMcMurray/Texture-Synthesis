@@ -32,7 +32,7 @@ def synthesis(sample, new_img_shape, window_size, gauss_mask):
     num_filled = data.SEED_SIZE ** 2
     start = time.perf_counter()
 
-    # Main while loop
+    # loop until image is filled
     while num_filled < pixel_count:
         print(f"{pixel_count - num_filled} left; {round(100 * num_filled / pixel_count, 2)}% complete; {int(time.perf_counter()-start)}s")
         progress = False

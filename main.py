@@ -1,7 +1,10 @@
+import time
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+
 import data
 import synthesis as s
-import time
-import matplotlib.pyplot as plt
 
 
 def run(texs):
@@ -25,7 +28,7 @@ def run(texs):
     return new_texs
 
 
-def plot(texs, syns):
+def plot(texs, syns, save=True):
     """(dict of name:list of imgs, dict of name:list of synthesized imgs)
     Plots the synthesized images for varying window sizes next to the originals
     """
@@ -44,6 +47,8 @@ def plot(texs, syns):
         for j, size in enumerate(data.WIN_SIZES):
             axs[j].set_title(f"{name} Texture Synthesized W={size}")
             axs[j].imshow(syns[name][j], cmap="gray")
+            plt.imsave(fname=Path(data.OUTPUT_DIR, name + f"_W_{size}" +
+                                  data.OUTPUT_EXT), arr=syns[name][j], cmap="gray")
 
     plt.show()
 
