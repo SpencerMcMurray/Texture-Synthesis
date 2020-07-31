@@ -30,6 +30,7 @@ def read_texs():
     texs = {}
     for filename in os.listdir(FILES_DIR):
         name = str(filename).split(".")[0]
-        texs[name] = io.imread(
-            fname=Path(str(FILES_DIR), filename), as_gray=True)
+        gray = io.imread(fname=Path(str(FILES_DIR), filename), as_gray=True)
+        clr = io.imread(fname=Path(str(FILES_DIR), filename))
+        texs[name] = {"gray": gray, "clr": clr}
     return texs

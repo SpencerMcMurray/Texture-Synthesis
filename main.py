@@ -20,7 +20,7 @@ def run(texs):
             print(f"Starting synthesis for {tex_name} w={size}")
             start = time.perf_counter()
             new_img = s.synthesis(
-                texs[tex_name], data.NEW_IMG_SIZE, size, data.GAUSS_MASKS[j])
+                texs[tex_name]["gray"], texs[tex_name]["clr"], data.NEW_IMG_SIZE, size, data.GAUSS_MASKS[j])
             print(f"Finished synthesis in {time.perf_counter() - start}s")
             new_imgs.append(new_img)
         new_texs[tex_name] = new_imgs
@@ -42,13 +42,13 @@ def plot(texs, syns, save=True):
             orig_ax, axs = axs[0], axs[1:]
 
         orig_ax.set_title(f"{name} Texture Original")
-        orig_ax.imshow(texs[name], cmap="gray")
+        orig_ax.imshow(texs[name]["clr"])
 
         for j, size in enumerate(data.WIN_SIZES):
             axs[j].set_title(f"{name} Texture Synthesized W={size}")
-            axs[j].imshow(syns[name][j], cmap="gray")
+            axs[j].imshow(syns[name][j])
             plt.imsave(fname=Path(data.OUTPUT_DIR, name + f"_W_{size}" +
-                                  data.OUTPUT_EXT), arr=syns[name][j], cmap="gray")
+                                  data.OUTPUT_EXT), arr=syns[name][j])
 
     plt.show()
 
