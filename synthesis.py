@@ -5,8 +5,8 @@ import time
 import matplotlib.pyplot as plt
 
 
-def synthesis(sample, new_img_shape, window_size, gauss_mask):
-    """(img, 2-tuple of int, int, 2D gaussian mask) => synthesized img
+def synthesis(sample, clr_sample, new_img_shape, window_size, gauss_mask):
+    """(img, img, 2-tuple of int, int, 2D gaussian mask) => synthesized img
     Implementation of the Texture Synthesis by Non-parametric Sampling
     algorithm developed by Efros & Leung.
     https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html
@@ -19,6 +19,7 @@ def synthesis(sample, new_img_shape, window_size, gauss_mask):
     rows, cols = new_img_shape
     pixel_count = rows * cols
     new_img = np.zeros((rows, cols))
+    new_clr_img = np.zeros((rows, cols, clr_sample.shape[-1]))
     filled = np.zeros((rows, cols))
     sample_windows = hlp.precompute_windows(sample, window_size)
 
@@ -47,9 +48,10 @@ def synthesis(sample, new_img_shape, window_size, gauss_mask):
             if best_match["error"] < max_thold:
                 x2, y2 = best_match["pixel"]
                 new_img[x1, y1] = sample[x2, y2]
+                new_clr_img[x1, y1] = clr_sample[x2, y2]
                 filled[x1, y1] = 1
                 progress = True
                 num_filled += 1
         if not progress:
             max_thold *= 1.1
-    return new_img
+    return new_clr_img.astype(np.uint8)
