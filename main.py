@@ -37,16 +37,16 @@ def plot(texs, syns, save=True):
     fig.suptitle(f"Texture synthesis results w={data.WIN_SIZES}")
     for i, name in enumerate(texs):
         if len(texs) > 1:
-            orig_ax, axs = axs[i, 0], axs[i, 1:]
+            orig_ax, ax = axs[i, 0], axs[i, 1:]
         else:
-            orig_ax, axs = axs[0], axs[1:]
+            orig_ax, ax = axs[0], axs[1:]
 
         orig_ax.set_title(f"{name} Texture Original")
         orig_ax.imshow(texs[name]["clr"])
 
         for j, size in enumerate(data.WIN_SIZES):
-            axs[j].set_title(f"{name} Texture Synthesized W={size}")
-            axs[j].imshow(syns[name][j])
+            ax[j].set_title(f"{name} Texture Synthesized W={size}")
+            ax[j].imshow(syns[name][j])
             plt.imsave(fname=Path(data.OUTPUT_DIR, name + f"_W_{size}" +
                                   data.OUTPUT_EXT), arr=syns[name][j])
 
