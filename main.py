@@ -7,7 +7,7 @@ import data
 import synthesis as s
 
 
-def run(texs):
+def run(texs, show_progress):
     """(dict of name:list of imgs) => dict of name:list of synthesized imgs
     Top level of the synthesis algorithm, calls lower functions to do heavy lifting.
     Returns synthesized images at differend window sizes to be sent through plot()
@@ -20,7 +20,7 @@ def run(texs):
             print(f"Starting synthesis for {tex_name} w={size}")
             start = time.perf_counter()
             new_img = s.synthesis(
-                texs[tex_name]["gray"], texs[tex_name]["clr"], data.NEW_IMG_SIZE, size, data.GAUSS_MASKS[j])
+                texs[tex_name]["gray"], texs[tex_name]["clr"], data.NEW_IMG_SIZE, size, data.GAUSS_MASKS[j], show_progress)
             print(f"Finished synthesis in {time.perf_counter() - start}s")
             new_imgs.append(new_img)
         new_texs[tex_name] = new_imgs
@@ -47,18 +47,20 @@ def plot(texs, syns, save=True):
         for j, size in enumerate(data.WIN_SIZES):
             ax[j].set_title(f"{name} Texture Synthesized W={size}")
             ax[j].imshow(syns[name][j])
-            plt.imsave(fname=Path(data.OUTPUT_DIR, name + f"_W_{size}" +
-                                  data.OUTPUT_EXT), arr=syns[name][j])
-
-    plt.show()
+            if save:
+                plt.imsave(fname=Path(data.OUTPUT_DIR, name + f"_W_{size}" +
+                                      data.OUTPUT_EXT), arr=syns[name][j])
+    if not save:
+        plt.show()
 
 
 if __name__ == "__main__":
+    SAVE, SHOW_PROG = True, True
     # Reads all imgs in /textures folder
     print("* STARTING READ *")
     TEXS = data.read_texs()
     print("* STARTING SYNTHESIS *")
-    SYNS = run(TEXS)
+    SYNS = run(TEXS, SHOW_PROG)
     print("* STARTING PLOTTING *")
-    plot(TEXS, SYNS)
+    plot(TEXS, SYNS, SAVE)
     print("* DONE *")
