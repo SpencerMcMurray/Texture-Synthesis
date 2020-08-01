@@ -5,8 +5,8 @@ import time
 import matplotlib.pyplot as plt
 
 
-def synthesis(sample, clr_sample, new_img_shape, window_size, gauss_mask):
-    """(img, img, 2-tuple of int, int, 2D gaussian mask) => synthesized img
+def synthesis(sample, clr_sample, new_img_shape, window_size, gauss_mask, show_progress=False):
+    """(img, img, 2-tuple of int, int, 2D gaussian mask, bool) => synthesized img
     Implementation of the Texture Synthesis by Non-parametric Sampling
     algorithm developed by Efros & Leung.
     https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html
@@ -24,10 +24,12 @@ def synthesis(sample, clr_sample, new_img_shape, window_size, gauss_mask):
     sample_windows = hlp.precompute_windows(sample, window_size)
 
     # Seed new img and filled
-    seed = hlp.seed_sample(sample, data.SEED_SIZE)
+    seed, clr_seed = hlp.seed_sample(sample, clr_sample, data.SEED_SIZE)
     mid_row, mid_col = rows // 2, cols // 2
     new_img[mid_row:mid_row + data.SEED_SIZE,
             mid_col:mid_col + data.SEED_SIZE] = seed
+    new_clr_img[mid_row:mid_row + data.SEED_SIZE,
+                mid_col:mid_col + data.SEED_SIZE] = seed
     filled[mid_row:mid_row + data.SEED_SIZE,
            mid_col:mid_col + data.SEED_SIZE] = np.ones((data.SEED_SIZE, data.SEED_SIZE))
     num_filled = data.SEED_SIZE ** 2
