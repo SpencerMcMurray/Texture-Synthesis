@@ -17,6 +17,8 @@ however making these values larger will increase the time it takes to complete b
 Additionally, try to keep the texture sizes small, as larger textures will increase the time
 cost as well.
 
+Feel free to modify the values in data.py, if you wish to disable to show progress or saving images, those flags are located in main.py
+
 Note:
  1) We can confirm this script works with Python 3.8.3, cannot confirm success for other versions of Python
  2) We can confirm the desired results for the current window sizes given in data.py, we encourage testing and manipulating the windows sizes, however, going below a window size of 3 may cause the program to crash.
