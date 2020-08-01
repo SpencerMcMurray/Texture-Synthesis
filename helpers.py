@@ -77,13 +77,13 @@ def unfilled_neighbours(filled_img, win_size):
     return sorted(unfilled, key=lambda p: p["count"], reverse=True)
 
 
-def seed_sample(sample, size):
+def seed_sample(sample, clr_sample, size):
     """(img, 2-tuple of ints) => square img of size size
     Creates the random (size)x(size) seed for the new image
     """
     rows, cols = sample.shape
     rand_x, rand_y = randint(0, rows - size), randint(0, cols - size)
-    return sample[rand_x:rand_x + size, rand_y:rand_y + size]
+    return sample[rand_x:rand_x + size, rand_y:rand_y + size], clr_sample[rand_x:rand_x + size, rand_y:rand_y + size]
 
 
 def gauss_window(shape, sigma):
