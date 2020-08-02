@@ -29,6 +29,8 @@ Note:
 
 ![text](https://i.imgur.com/FILAa4h.png)
 
+![text](https://i.imgur.com/dqZnq52.png)
+
 ## Credit
 
 The algorithm used was created by [A.A. Efros and T.K. Leung](https://people.eecs.berkeley.edu/~efros/research/NPS/alg.html).
