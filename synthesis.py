@@ -15,11 +15,13 @@ def synthesis(sample, clr_sample, new_img_shape, window_size, gauss_mask, show_p
     REQ: gauss_mask's size == window_size
     REQ: window_size <= min(sample.shape)
     """
+    clr_avail = len(clr_sample.shape) == 3
     max_thold = data.MAX_ERR_THOLD
     rows, cols = new_img_shape
     pixel_count = rows * cols
     new_img = np.zeros((rows, cols))
-    new_clr_img = np.zeros((rows, cols, clr_sample.shape[-1]))
+    if clr_avail:
+        new_clr_img = np.zeros((rows, cols, clr_sample.shape[-1]))
     filled = np.zeros((rows, cols))
     sample_windows = hlp.precompute_windows(sample, window_size)
 
@@ -28,8 +30,9 @@ def synthesis(sample, clr_sample, new_img_shape, window_size, gauss_mask, show_p
     mid_row, mid_col = rows // 2, cols // 2
     new_img[mid_row:mid_row + data.SEED_SIZE,
             mid_col:mid_col + data.SEED_SIZE] = seed
-    new_clr_img[mid_row:mid_row + data.SEED_SIZE,
-                mid_col:mid_col + data.SEED_SIZE] = clr_seed
+    if clr_avail:
+        new_clr_img[mid_row:mid_row + data.SEED_SIZE,
+                    mid_col:mid_col + data.SEED_SIZE] = clr_seed
     filled[mid_row:mid_row + data.SEED_SIZE,
            mid_col:mid_col + data.SEED_SIZE] = np.ones((data.SEED_SIZE, data.SEED_SIZE))
     num_filled = data.SEED_SIZE ** 2
@@ -40,8 +43,9 @@ def synthesis(sample, clr_sample, new_img_shape, window_size, gauss_mask, show_p
     while num_filled < pixel_count:
         print(f"{pixel_count - num_filled} left; {round(100 * num_filled / pixel_count, 2)}% complete; {int(time.perf_counter()-start)}s")
         if show_progress:
-            cv2.imshow('Synthesis Progress', cv2.cvtColor(
-                new_clr_img.astype(np.uint8), cv2.COLOR_BGR2RGB))
+            to_show = cv2.cvtColor(new_clr_img.astype(
+                np.uint8), cv2.COLOR_BGR2RGB) if clr_avail else new_img.astype(np.uint8)
+            cv2.imshow('Synthesis Progress', to_show)
             cv2.waitKey(1)
         progress = False
         unfilled = hlp.unfilled_neighbours(filled, window_size)
@@ -55,10 +59,12 @@ def synthesis(sample, clr_sample, new_img_shape, window_size, gauss_mask, show_p
             if best_match["error"] < max_thold:
                 x2, y2 = best_match["pixel"]
                 new_img[x1, y1] = sample[x2, y2]
-                new_clr_img[x1, y1] = clr_sample[x2, y2]
+                if clr_avail:
+                    new_clr_img[x1, y1] = clr_sample[x2, y2]
                 filled[x1, y1] = 1
                 progress = True
                 num_filled += 1
         if not progress:
             max_thold *= 1.1
-    return new_clr_img.astype(np.uint8)
+    ret = new_clr_img if clr_avail else new_img
+    return ret.astype(np.uint8)
