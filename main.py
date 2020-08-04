@@ -48,7 +48,7 @@ def plot(texs, syns, save=True):
             ax[j].set_title(f"{name} Texture Synthesized W={size}")
             ax[j].imshow(syns[name][j])
             if save:
-                cmap = 'viridis' if len(clr_sample.shape) == 3 else 'gray'
+                cmap = 'viridis' if len(syns[name][j].shape) == 3 else 'gray'
                 plt.imsave(fname=Path(data.OUTPUT_DIR, name + f"_W_{size}" +
                                       data.OUTPUT_EXT), arr=syns[name][j], cmap=cmap)
     if not save:
