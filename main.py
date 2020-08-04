@@ -48,14 +48,15 @@ def plot(texs, syns, save=True):
             ax[j].set_title(f"{name} Texture Synthesized W={size}")
             ax[j].imshow(syns[name][j])
             if save:
+                cmap = 'viridis' if len(clr_sample.shape) == 3 else 'gray'
                 plt.imsave(fname=Path(data.OUTPUT_DIR, name + f"_W_{size}" +
-                                      data.OUTPUT_EXT), arr=syns[name][j])
+                                      data.OUTPUT_EXT), arr=syns[name][j], cmap=cmap)
     if not save:
         plt.show()
 
 
 if __name__ == "__main__":
-    SAVE, SHOW_PROG = True, True
+    SAVE, SHOW_PROG = True, False
     # Reads all imgs in /textures folder
     print("* STARTING READ *")
     TEXS = data.read_texs()
